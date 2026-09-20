@@ -27,7 +27,13 @@ namespace EscuelaCopalchi.UI.Models.Estudiantes
         public string NombreEncargado { get; set; }
 
         [Required]
+        public string Parentesco { get; set; }
+
+        [Required]
         public string TelefonoEncargado { get; set; }
+
+        [Required]
+        public string CorreoEncargado { get; set; }
 
         public bool Estado { get; set; }
     }

@@ -20,7 +20,7 @@ namespace EscuelaCopalchi.UI.Controllers
         [HttpGet]
         public ActionResult Registrar()
         {
-            return View("Crear");
+            return View("~/Views/Estudiantes/Crear.cshtml");
         }
 
         [HttpPost]
@@ -30,22 +30,83 @@ namespace EscuelaCopalchi.UI.Controllers
             {
                 if (!ModelState.IsValid)
                 {
-                    return View("Crear", estudiante);
+                    var errores = string.Join(
+                        "<br>",
+                        ModelState.Values
+                                  .SelectMany(v => v.Errors)
+                                  .Select(e => e.ErrorMessage));
+
+                    ViewBag.Error = errores;
+
+                    return View("~/Views/Estudiantes/Crear.cshtml", estudiante);
                 }
 
                 string resultado =
                     repository.Guardar(estudiante);
 
-                TempData["Success"] =
-                    "Estudiante registrado correctamente.";
+                if (resultado == "Se ha guardado correctamente")
+                {
+                    TempData["Success"] =
+                        "Estudiante registrado correctamente.";
 
-                return RedirectToAction("Crear");
+                    return RedirectToAction("Registrar");
+                }
+
+                ViewBag.Error = resultado;
+
+                return View("~/Views/Estudiantes/Crear.cshtml", estudiante);
+
+
+                return RedirectToAction("Registrar");
             }
             catch (Exception ex)
             {
                 ViewBag.Error = ex.Message;
-                return View("Crear");
+                return View("~/Views/Estudiantes/Crear.cshtml", estudiante);
             }
+        }
+
+        public ActionResult Index(
+            string filtroEstado = "Todos",
+            string busqueda = "")
+        {
+            var estudiantes = repository.ObtenerTodos();
+
+            if (!string.IsNullOrWhiteSpace(busqueda))
+            {
+                estudiantes = estudiantes
+                    .Where(x =>
+                        (x.Nombre + " " + x.Apellido1 + " " + x.Apellido2)
+                        .ToLower()
+                        .Contains(busqueda.ToLower())
+                        ||
+                        x.Identificacion.ToLower()
+                        .Contains(busqueda.ToLower())
+                        ||
+                        x.NombreEncargado.ToLower()
+                        .Contains(busqueda.ToLower()))
+                    .ToList();
+            }
+
+            if (filtroEstado == "Activos")
+            {
+                estudiantes = estudiantes
+                    .Where(x => x.Estado)
+                    .ToList();
+            }
+            else if (filtroEstado == "Inactivos")
+            {
+                estudiantes = estudiantes
+                    .Where(x => !x.Estado)
+                    .ToList();
+            }
+
+            ViewBag.FiltroEstado = filtroEstado;
+            ViewBag.Busqueda = busqueda;
+
+            return View(
+                "~/Views/Estudiantes/Index.cshtml",
+                estudiantes);
         }
     }
 }

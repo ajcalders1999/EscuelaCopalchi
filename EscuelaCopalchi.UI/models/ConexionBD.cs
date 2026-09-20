@@ -87,9 +87,9 @@ namespace EscuelaCopalchi.UI.Models
 
 
         public string ejecutarProcedimiento_Save(
-    string procedureName,
-    string[] paramNames,
-    string[] valueNames)
+            string procedureName,
+            string[] paramNames,
+            string[] valueNames)
         {
             using (SqlConnection conn = new SqlConnection(connString))
             {
@@ -110,15 +110,9 @@ namespace EscuelaCopalchi.UI.Models
                             valueNames[i]);
                     }
 
-                    int filasAfectadas =
-                        sqlComm.ExecuteNonQuery();
+                    sqlComm.ExecuteNonQuery();
 
-                    if (filasAfectadas > 0)
-                    {
-                        return "Se ha guardado correctamente";
-                    }
-
-                    return "No se realizaron cambios";
+                    return "Se ha guardado correctamente";
                 }
                 catch (Exception ex)
                 {
