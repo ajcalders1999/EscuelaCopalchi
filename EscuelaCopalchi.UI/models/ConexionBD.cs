@@ -14,6 +14,7 @@ namespace EscuelaCopalchi.UI.Models
         private string connString_Pame;
         private string connString_Ema;
         private string connString_Fran;
+
         private DataSet DataSet;
 
         public ConexionBD()
