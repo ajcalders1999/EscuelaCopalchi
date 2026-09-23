@@ -7,10 +7,7 @@ namespace EscuelaCopalchi.UI.Models
     public class ConexionBD
     {
         private string connString;
-        private string connString_Adrían =
-                @"Server=localhost\SQLEXPRESSADRIAN;
-                  Database=AulaVirtualCopalchi;
-                  Trusted_Connection=True;";
+        private string connString_Adrían = @"Server=localhost\SQLEXPRESSADRIAN;Database=AulaVirtualCopalchi;Trusted_Connection=True;";
         private string connString_Pame;
         private string connString_Ema;
         private string connString_Fran;
@@ -26,7 +23,7 @@ namespace EscuelaCopalchi.UI.Models
 
         public bool validarConexion()
         {
-            try
+            try   
             {
                 using (SqlConnection conn =
                        new SqlConnection(connString))
